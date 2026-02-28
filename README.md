@@ -1,4 +1,8 @@
 # tink-her-hack
+Team name : Brainwaves
+Team Members
+Member 1: Nandana Sankar - Model Engineering College
+Member 2: Sandra S - Model Engineering College
 
 Project Description
 The Smart Blind Stick is an Arduino-based assistive device developed to enhance the safety of visually impaired individuals. It uses an ultrasonic sensor to detect obstacles, a water sensor to identify wet surfaces, and an MPU6050 accelerometer to detect falls. When a hazard is detected, the system activates a buzzer and vibration motor to alert the user, and a push button is provided to reset the system after a fall alert. The device operates without GSM or GPS, making it a low-cost, efficient, and reliable safety solution for daily use.
@@ -144,8 +148,6 @@ Place water sensor at bottom.
 Secure Arduino and modules inside protective casing.
 Arrange wires neatly to avoid short circuits
 
-Team members
-Nandana Sankar and Sandra S
 
 Licensed under MIT License
 
