@@ -20,7 +20,7 @@ Final total cost 1070
 
 Assembly Instructions
 Step 1: Prepare Components
-Collect all components:Arduino Nano,MPU6050,HC-SR04,Water Sensor,Active Buzzer,Coin Vibration Motor,Breadboard,Jumper Wires 
+Collect all components:Arduino uno,MPU6050,HC-SR04,Water Sensor,Active Buzzer,Coin Vibration Motor,Breadboard,Jumper Wires 
 Ensure Arduino IDE and required libraries (Wire, MPU6050) are installed.
 
 Step 2: Mount the Arduino
@@ -143,3 +143,9 @@ Fix ultrasonic sensor at front.
 Place water sensor at bottom.
 Secure Arduino and modules inside protective casing.
 Arrange wires neatly to avoid short circuits
+
+Team members
+Nandana Sankar
+Sandra S
+
+
