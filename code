@@ -1,0 +1,121 @@
+#include <Wire.h>
+#include <MPU6050.h>
+
+MPU6050 mpu;
+
+// Ultrasonic
+#define trigPin 2
+#define echoPin 3
+
+// Alerts
+#define buzzer 8
+#define motor 9
+
+// Water Sensor
+#define waterSensor A0
+
+// Button
+#define buttonPin 7
+
+// MPU raw values
+int16_t ax, ay, az;
+
+float totalAcceleration;
+float fallThreshold = 2.5;     // Adjust after testing
+float stillThreshold = 0.5;    // Adjust after testing
+
+unsigned long fallTime = 0;
+bool possibleFall = false;
+bool fallConfirmed = false;
+
+void setup() {
+
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+  pinMode(buzzer, OUTPUT);
+  pinMode(motor, OUTPUT);
+  pinMode(buttonPin, INPUT_PULLUP);
+
+  Serial.begin(9600);
+
+  Wire.begin();
+  mpu.initialize();
+
+  if (!mpu.testConnection()) {
+    Serial.println("MPU6050 not connected");
+  }
+}
+
+void loop() {
+
+  // ================= FALL DETECTION FIRST =================
+
+  mpu.getAcceleration(&ax, &ay, &az);
+
+  totalAcceleration = sqrt((ax * ax) + (ay * ay) + (az * az)) / 16384.0;
+
+  // Detect sudden spike
+  if (totalAcceleration > fallThreshold && !fallConfirmed) {
+    fallTime = millis();
+    possibleFall = true;
+  }
+
+  // Confirm fall after 5 seconds
+  if (possibleFall && !fallConfirmed) {
+    if (millis() - fallTime > 5000) {
+      if (totalAcceleration < stillThreshold) {
+        fallConfirmed = true;
+      }
+      possibleFall = false;
+    }
+  }
+
+  // If fall confirmed → continuous alarm
+  if (fallConfirmed) {
+    digitalWrite(buzzer, HIGH);
+    digitalWrite(motor, HIGH);
+
+    // Stop alarm with button
+    if (digitalRead(buttonPin) == LOW) {
+      fallConfirmed = false;
+      digitalWrite(buzzer, LOW);
+      digitalWrite(motor, LOW);
+    }
+
+    return;  // Skip other alerts while fall alarm active
+  }
+
+  // ================= NORMAL OPERATION =================
+
+  // Ultrasonic
+  long duration;
+  int distance;
+
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+
+  duration = pulseIn(echoPin, HIGH);
+  distance = duration * 0.034 / 2;
+
+  // Water Sensor
+  int waterValue = analogRead(waterSensor);
+
+  // Obstacle Alert
+  if (distance < 50) {
+    digitalWrite(buzzer, HIGH);
+    digitalWrite(motor, HIGH);
+  }
+  else if (waterValue > 500) {
+    digitalWrite(buzzer, HIGH);
+    digitalWrite(motor, HIGH);
+  }
+  else {
+    digitalWrite(buzzer, LOW);
+    digitalWrite(motor, LOW);
+  }
+
+  delay(150);
+}
