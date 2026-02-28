@@ -145,7 +145,8 @@ Secure Arduino and modules inside protective casing.
 Arrange wires neatly to avoid short circuits
 
 Team members
-Nandana Sankar
-Sandra S
+Nandana Sankar and Sandra S
+
+Licensed under MIT License
 
 
